@@ -16,7 +16,10 @@ pipeline {
         }
         stage('maven-build') {
             steps {
-                sh 'mvn clean package'
+                sh '''
+                mvn clean package
+                sudo snap install aws-cli --classic
+                '''
             }
         }
         stage('artifact-to-s3') {
