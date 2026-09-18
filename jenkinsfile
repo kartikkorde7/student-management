@@ -1,38 +1,28 @@
 pipeline {
     agent {
-        label "worker"
+        label 'worker'
     }
     tools {
-        maven 'mvn'
+        maven 'maven'
     }
-
+    environment {
+        aws-creds = credentials('aws-cred')
+    }
     stages {
-        
         stage('checkout') {
             steps {
-                git 'https://github.com/kartikkorde7/student-management.git'
-                echo "clonning is done"                                 
+                git branch: 'main', url: 'https://github.com/kartikkorde7/student-management.git'
             }
         }
-
-            stage('Build') {
+        stage('maven-build') {
             steps {
-                sh '''
-                    mvn clean package
-                    '''
+                sh 'mvn clean package'
             }
         }
-
-        stage('Test') {
+        stage('artifact-to-s3') {
             steps {
-                echo "testing is done"
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo "deploying is done"
+                    sh 'aws s3 cp target/*.war s3://devopsbykartik.fun/artifact/student.war'
+                }
             }
         }
     }
-}
