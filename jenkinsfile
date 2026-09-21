@@ -34,10 +34,20 @@ pipeline {
         }
 
         stage('Artifacts to s3') {
-            steps {
-                sh 'aws s3 cp target/*.war s3://devopsbykartik.fun/student.war'
+    steps {
+        sh '''
+            echo "Checking WAR file..."
+            ls -lh target/*.war
+
+            echo "Checking AWS..."
+            aws --version
+            aws sts get-caller-identity
+
+            echo "Uploading WAR to S3..."
+            aws s3 cp target/*.war s3://devopsbykartik.fun/student.war
+        '''
             }
-        }
+       }
 
         stage('SonarQube Analysis'){
             steps {
