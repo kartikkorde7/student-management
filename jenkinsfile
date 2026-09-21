@@ -35,7 +35,7 @@ pipeline {
 
         stage('Artifacts to s3') {
             steps {
-                sh 'aws s3 cp target/*.war s3://devopsbykartik.fun/Artifacts/student.war'
+                sh 'aws s3 cp target/*.war s3://devopsbykartik.fun/student.war'
             }
         }
 
